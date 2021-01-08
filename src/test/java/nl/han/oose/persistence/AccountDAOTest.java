@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ class AccountDAOTest {
     @Test
     void getAllAccountsRetrievesAllAccountsFromDB() throws Exception {
         loadDatabaseFixture("fixtureBaseData.sql");
-        List<AccountDTO> actualAccounts = sut.getAllAccounts();
+        var actualAccounts = sut.getAllAccounts();
         assertTrue(actualAccounts.contains(new AccountDTO("one", "onepass")));
         assertTrue(actualAccounts.contains(new AccountDTO("two", "twopass")));
         assertEquals(2, actualAccounts.size());
@@ -46,7 +45,7 @@ class AccountDAOTest {
     @Test
     void accountIsDeleted() throws Exception {
         loadDatabaseFixture("fixtureBaseData.sql");
-        AccountDTO accountToDelete = new AccountDTO("one", "onepass");
+        var accountToDelete = new AccountDTO("one", "onepass");
         assertTrue(getAllAccounts().contains(accountToDelete));
         sut.deleteAccount(accountToDelete);
         assertFalse(getAllAccounts().contains(accountToDelete));
@@ -58,7 +57,7 @@ class AccountDAOTest {
                 PreparedStatement stmt = new ConnectionFactory().getConnection()
                         .prepareStatement("SELECT * FROM accounts")
         ) {
-            ResultSet resultSet = stmt.executeQuery();
+            var resultSet = stmt.executeQuery();
             while (resultSet.next()) {
                 accounts.add(new AccountDTO(resultSet.getString("username")
                         , resultSet.getString("password")));
@@ -70,7 +69,7 @@ class AccountDAOTest {
     @Test
     void exceptionThrownIfAccountToDeleteDoesNotExist() throws Exception {
         loadDatabaseFixture("fixtureBaseData.sql");
-        SpotitubePersistenceException spotitubePersistenceException = assertThrows(SpotitubePersistenceException.class,
+        var spotitubePersistenceException = assertThrows(SpotitubePersistenceException.class,
                 () -> sut.deleteAccount(new AccountDTO("nobody", "nopass")));
         assertEquals("Account does not exist in database. Nothing deleted.",
                 spotitubePersistenceException.getMessage());
@@ -79,9 +78,9 @@ class AccountDAOTest {
     @Test
     void accountIsUpdated() throws Exception {
         loadDatabaseFixture("fixtureBaseData.sql");
-        AccountDTO accountToUpdate = new AccountDTO("one", "onepassUpdated");
+        var accountToUpdate = new AccountDTO("one", "onepassUpdated");
         sut.updateAccount(accountToUpdate);
-        AccountDTO actualAccount = getAllAccounts().stream()
+        var actualAccount = getAllAccounts().stream()
                 .filter(accountDTO -> accountDTO.getUsername().equals("one")).findFirst().get();
         assertEquals("onepassUpdated", actualAccount.getPassword());
     }
@@ -89,7 +88,7 @@ class AccountDAOTest {
     @Test
     void exceptionThrownIfAccountToUpdateDoesNotExist() throws Exception {
         loadDatabaseFixture("fixtureBaseData.sql");
-        SpotitubePersistenceException spotitubePersistenceException = assertThrows(SpotitubePersistenceException.class,
+        var spotitubePersistenceException = assertThrows(SpotitubePersistenceException.class,
                 () -> sut.updateAccount(new AccountDTO("nobody", "nopass")));
         assertEquals("Account does not exist in database. Nothing updated.",
                 spotitubePersistenceException.getMessage());

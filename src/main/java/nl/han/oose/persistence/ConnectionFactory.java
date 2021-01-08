@@ -1,7 +1,6 @@
 package nl.han.oose.persistence;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,9 +19,9 @@ class ConnectionFactory {
     }
 
     private Properties loadProperties() throws SpotitubePersistenceException {
-        Properties properties = new Properties();
+        var properties = new Properties();
         try (
-                InputStream inputStream = this.getClass().getResourceAsStream(PROPERTY_LOCATION)
+                var inputStream = this.getClass().getResourceAsStream(PROPERTY_LOCATION)
         ) {
             properties.load(inputStream);
         } catch (IOException e) {

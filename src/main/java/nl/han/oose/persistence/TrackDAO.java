@@ -5,8 +5,11 @@ import nl.han.oose.dto.TrackDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class TrackDAO {
+
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     private ConnectionFactory connectionFactory = new ConnectionFactory();
 
@@ -23,7 +26,7 @@ public class TrackDAO {
                         resultSet.getString("name")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
             throw new SpotitubePersistenceException(e);
         }
         return resultList;

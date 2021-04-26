@@ -5,8 +5,11 @@ import nl.han.oose.dto.AccountDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class AccountDAO {
+
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     private ConnectionFactory connectionFactory = new ConnectionFactory();
 
@@ -23,7 +26,7 @@ public class AccountDAO {
                         resultSet.getString("password")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
             throw new SpotitubePersistenceException(e);
         }
         return resultList;
@@ -40,7 +43,7 @@ public class AccountDAO {
                 throw new SpotitubePersistenceException("Account does not exist in database. Nothing deleted.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
             throw new SpotitubePersistenceException(e);
         }
     }
@@ -57,7 +60,7 @@ public class AccountDAO {
                 throw new SpotitubePersistenceException("Account does not exist in database. Nothing updated.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
             throw new SpotitubePersistenceException(e);
         }
     }

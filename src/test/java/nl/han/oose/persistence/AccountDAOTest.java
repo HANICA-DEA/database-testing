@@ -43,6 +43,27 @@ class AccountDAOTest {
     }
 
     @Test
+    void persistenceExceptionIsThrownForSQLExceptionInGetAllAccounts() {
+        var thrownException = assertThrows(SpotitubePersistenceException.class,
+                () -> sut.getAllAccounts());
+        assertTrue(thrownException.getMessage().contains("Table \"accounts\" not found"));
+    }
+
+    @Test
+    void persistenceExceptionIsThrownForSQLExceptionInDeleteAccount() {
+        var thrownException = assertThrows(SpotitubePersistenceException.class,
+                () -> sut.deleteAccount(new AccountDTO("test", "testpass")));
+        assertTrue(thrownException.getMessage().contains("Table \"accounts\" not found"));
+    }
+
+    @Test
+    void persistenceExceptionIsThrownForSQLExceptionInUpdateAccount() {
+        var thrownException = assertThrows(SpotitubePersistenceException.class,
+                () -> sut.updateAccount(new AccountDTO("test", "testpass")));
+        assertTrue(thrownException.getMessage().contains("Table \"accounts\" not found"));
+    }
+
+    @Test
     void accountIsDeleted() throws Exception {
         loadDatabaseFixture("fixtureBaseData.sql");
         var accountToDelete = new AccountDTO("one", "onepass");
